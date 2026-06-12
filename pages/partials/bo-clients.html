@@ -1,0 +1,21 @@
+  <!-- ══ TAB CLIENTS ══ -->
+  <div id="tab-clients" class="tab-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem">
+      <h2 style="font-size:1.05rem;font-weight:700;color:var(--primary)">Fiches clients</h2>
+      <input class="search-bo" type="text" id="search-client" placeholder="Rechercher nom, e-mail…" oninput="filterClients()" style="max-width:280px"/>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Client</th><th>Email</th><th>Tél.</th><th>Inscrit le</th><th>Dossiers</th><th>Validés</th><th>Contrats</th><th>Actions</th></tr></thead>
+        <tbody id="clients-tbody"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted)">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+<!-- ══ DRAWER FICHE CLIENT ══ -->
+<div id="client-drawer-overlay" onclick="closeClientDrawer()"
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;backdrop-filter:blur(4px)"></div>
+<div id="client-drawer"
+  style="display:none;position:fixed;top:0;right:0;width:min(680px,100vw);height:100vh;background:#fff;z-index:301;box-shadow:-8px 0 40px rgba(0,0,0,.18);overflow-y:auto;transition:transform .3s ease">
+  <div id="client-drawer-content" style="padding:0 0 4rem"></div>
+</div>

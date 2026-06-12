@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M-Motors | Mon espace client</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/espace-client.css"/>
+</head>
+<body>
+
+<header class="nav" id="main-nav"></header>
+
+<div class="page-header">
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+    <div>
+      <h1>Mon espace client</h1>
+      <p id="welcome-msg">Bienvenue !</p>
+    </div>
+  </div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="grid-4" id="stats-row" style="margin-bottom:2rem"></div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('contrats', this)">Mes contrats</button>
+    <button class="tab-btn"        onclick="switchTab('dossiers', this)">Mes dossiers</button>
+    <button class="tab-btn"        onclick="switchTab('notifs',   this)">Notifications <span id="notif-badge" style="display:none;background:var(--danger);color:#fff;border-radius:2rem;font-size:.7rem;padding:.1rem .45rem;margin-left:.3rem;font-weight:700"></span></button>
+    <button class="tab-btn"        onclick="switchTab('messages', this)">Messages <span id="msg-badge" style="display:none;background:var(--danger);color:#fff;border-radius:2rem;font-size:.7rem;padding:.1rem .45rem;margin-left:.3rem;font-weight:700"></span></button>
+    <button class="tab-btn"        onclick="switchTab('sav',     this)">SAV <span id="sav-badge" style="display:none;background:var(--warn,#f59e0b);color:#fff;border-radius:2rem;font-size:.7rem;padding:.1rem .45rem;margin-left:.3rem;font-weight:700"></span></button>
+    <button class="tab-btn"        onclick="switchTab('profil',   this)">Mon profil</button>
+  </div>
+
+  <div id="tab-contrats" class="tab-content active"><div id="contrats-content"></div></div>
+  <div id="tab-dossiers" class="tab-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem">
+      <h2 style="font-size:1.05rem;font-weight:700;color:var(--primary)">Historique de mes dossiers</h2>
+      <a href="../index.html" class="btn btn-primary btn-sm">+ Nouveau dossier</a>
+    </div>
+    <div id="dossiers-list"></div>
+  </div>
+  <div id="tab-notifs" class="tab-content">
+    <h2 style="font-size:1.05rem;font-weight:700;color:var(--primary);margin-bottom:1.25rem">Notifications</h2>
+    <div id="notifs-list"></div>
+  </div>
+
+  <!-- ══ TAB MESSAGES ══ -->
+  <div id="tab-messages" class="tab-content">
+    <div style="display:flex;height:calc(100vh - 220px);min-height:420px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+
+      <div style="width:260px;min-width:180px;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--bg)">
+        <div style="padding:.75rem 1rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.88rem">Mes conversations</div>
+        <div id="client-msg-list" style="overflow-y:auto;flex:1">
+          <p class="text-muted text-sm" style="padding:.75rem 1rem">Chargement…</p>
+        </div>
+      </div>
+
+      <div style="flex:1;display:flex;flex-direction:column;background:#fff">
+        <div id="client-msg-header" style="padding:.75rem 1.25rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.9rem;color:var(--primary)">
+          <span id="client-msg-header-label" style="color:var(--text-muted);font-weight:400;font-size:.85rem">Sélectionnez un dossier</span>
+        </div>
+        <div id="client-msg-thread" style="flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.6rem">
+          <div style="margin:auto;text-align:center;color:var(--text-muted);font-size:.88rem">
+            Choisissez un dossier dans la liste pour afficher la conversation.
+          </div>
+        </div>
+        <div id="client-msg-input-zone" style="padding:.75rem 1rem;border-top:1px solid var(--border);display:flex;gap:.5rem">
+          <input type="text" id="client-msg-input" class="form-input" placeholder="Envoyer un message à M-Motors…"
+            style="flex:1" disabled onkeydown="if(event.key==='Enter')sendClientTabMsg()">
+          <button class="btn btn-primary btn-sm" onclick="sendClientTabMsg()" disabled id="client-msg-send-btn">Envoyer</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ TAB SAV ══ -->
+  <div id="tab-sav" class="tab-content">
+    <div style="max-width:720px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem">
+        <div>
+          <h3 style="color:var(--primary);font-size:1.05rem;font-weight:800;margin:0">Service Après-Vente</h3>
+          <div style="font-size:.83rem;color:var(--text-muted);margin-top:.2rem">Signalez un problème technique ou demandez une assistance.</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="showSAVForm()">Nouvelle demande</button>
+      </div>
+
+      <div id="sav-form-block" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem">
+        <h4 style="margin:0 0 1rem;font-size:.95rem;color:var(--primary)">Nouvelle demande SAV</h4>
+        <div class="form-group">
+          <label class="form-label">Sujet <span style="color:var(--danger)">*</span></label>
+          <input class="form-input" type="text" id="sav-sujet" placeholder="Ex : Problème de démarrage, bruit anormal…" maxlength="200"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description <span style="color:var(--danger)">*</span></label>
+          <textarea class="form-input" id="sav-desc" rows="4" placeholder="Décrivez le problème en détail…" style="resize:vertical"></textarea>
+        </div>
+        <div id="sav-form-alert" style="margin-bottom:.75rem"></div>
+        <div style="display:flex;gap:.75rem;justify-content:flex-end">
+          <button class="btn btn-secondary btn-sm" onclick="hideSAVForm()">Annuler</button>
+          <button class="btn btn-primary btn-sm" onclick="submitSAV()">Envoyer la demande</button>
+        </div>
+      </div>
+
+      <div id="sav-list"></div>
+    </div>
+  </div>
+
+  <div id="tab-profil" class="tab-content">
+    <div class="form-card" style="max-width:560px">
+      <h3 style="color:var(--primary);margin-bottom:1.25rem">Mes informations</h3>
+      <div id="profil-alert"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nom</label><input class="form-input" type="text" id="p-nom"/></div>
+        <div class="form-group"><label class="form-label">Prénom</label><input class="form-input" type="text" id="p-prenom"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" type="email" id="p-email" readonly style="background:var(--bg);color:var(--text-muted)"/><p class="form-help">L'e-mail ne peut pas être modifié.</p></div>
+      <div class="form-group"><label class="form-label">Téléphone</label><input class="form-input" type="tel" id="p-tel"/></div>
+      <button class="btn btn-primary" onclick="saveProfil()">Enregistrer</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal détail dossier -->
+<div class="modal-overlay" id="modal-dossier">
+  <div class="modal" style="max-width:560px">
+    <button class="modal-close" onclick="closeModal('modal-dossier')">x</button>
+    <h3>Détail du dossier</h3>
+    <div id="modal-dossier-content"></div>
+  </div>
+</div>
+
+<!-- Modal paiement carte -->
+<div class="modal-overlay" id="modal-paiement">
+  <div class="modal" style="max-width:460px">
+    <button class="modal-close" onclick="closeModal('modal-paiement')">×</button>
+    <h3 style="margin-bottom:1.25rem">Paiement sécurisé</h3>
+    <div id="pay-recap" style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;margin-bottom:1.25rem;font-size:.88rem"></div>
+
+    <div class="form-group">
+      <label class="form-label">Mode de paiement</label>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap" id="pay-modes">
+        <button type="button" class="pay-mode-btn active" onclick="selectPayMode('cb',this)">💳 Carte bancaire</button>
+        <button type="button" class="pay-mode-btn"        onclick="selectPayMode('virement',this)">🏦 Virement</button>
+        <button type="button" class="pay-mode-btn"        onclick="selectPayMode('cheque',this)">📄 Chèque</button>
+      </div>
+    </div>
+
+    <div id="pay-form-cb">
+      <div class="form-group">
+        <label class="form-label">Numéro de carte</label>
+        <input class="form-input" id="pay-card-num" type="text" maxlength="19" placeholder="1234 5678 9012 3456"
+          oninput="fmtCardNum(this)" style="font-size:1rem;letter-spacing:.08em;font-family:monospace">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Expiration</label>
+          <input class="form-input" id="pay-card-exp" type="text" maxlength="5" placeholder="MM/AA" oninput="fmtCardExp(this)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">CVV</label>
+          <input class="form-input" id="pay-card-cvv" type="password" maxlength="3" placeholder="•••">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nom sur la carte</label>
+        <input class="form-input" id="pay-card-name" type="text" placeholder="JEAN DUPONT" style="text-transform:uppercase">
+      </div>
+    </div>
+
+    <div id="pay-form-virement" style="display:none">
+      <div style="background:#f0f9ff;border:1px solid #bfdbfe;border-radius:var(--radius-sm);padding:.85rem 1rem;font-size:.87rem;line-height:1.7">
+        <div style="font-weight:700;margin-bottom:.3rem">Coordonnées bancaires M-Motors</div>
+        <div>IBAN : <strong>FR76 3000 6000 0112 3456 7890 189</strong></div>
+        <div>BIC : <strong>AGRIFRPP882</strong></div>
+        <div>Référence à indiquer : <strong id="pay-vir-ref"></strong></div>
+      </div>
+      <div class="form-group mt-2">
+        <label class="form-label">Référence de votre virement</label>
+        <input class="form-input" id="pay-vir-refclient" type="text" placeholder="Ex : VIR-2024-0042">
+      </div>
+    </div>
+
+    <div id="pay-form-cheque" style="display:none">
+      <div style="background:#fefce8;border:1px solid #fde047;border-radius:var(--radius-sm);padding:.85rem 1rem;font-size:.87rem;line-height:1.7">
+        <div style="font-weight:700;margin-bottom:.3rem">Chèque à l'ordre de M-Motors SAS</div>
+        <div>À envoyer à : M-Motors SAS, Paris</div>
+      </div>
+      <div class="form-group mt-2">
+        <label class="form-label">Numéro du chèque</label>
+        <input class="form-input" id="pay-cheque-num" type="text" placeholder="Ex : 0012345">
+      </div>
+    </div>
+
+    <div id="pay-alert" style="margin-top:.75rem"></div>
+    <div id="pay-processing" style="display:none;text-align:center;padding:1.5rem;color:var(--primary);font-weight:600">
+      Traitement en cours…
+    </div>
+    <div style="display:flex;gap:.75rem;margin-top:1.25rem;justify-content:flex-end">
+      <button class="btn btn-secondary" onclick="closeModal('modal-paiement')">Annuler</button>
+      <button class="btn btn-primary" id="pay-submit-btn" onclick="submitPaiement()">Payer</button>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:.4rem;margin-top:.75rem;font-size:.75rem;color:var(--text-muted)">
+      🔒 Paiement sécurisé SSL · Données chiffrées
+    </div>
+  </div>
+</div>
+
+<!-- Modal step contrat -->
+<div class="modal-overlay" id="modal-step">
+  <div class="modal" style="max-width:520px">
+    <button class="modal-close" onclick="closeModal('modal-step')">x</button>
+    <h3 id="modal-step-title"></h3>
+    <div id="modal-step-content"></div>
+    <div style="display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.5rem">
+      <button class="btn btn-secondary" onclick="closeModal('modal-step')">Annuler</button>
+      <button class="btn btn-primary" onclick="confirmStep()">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer"><strong>M-Motors</strong> — Votre espace personnel · Données sécurisées</footer>
+
+<script src="../js/api.js"></script>
+<script src="../js/api-auth.js"></script>
+<script src="../js/api-vehicles.js"></script>
+<script src="../js/api-dossiers.js"></script>
+<script src="../js/api-contrats.js"></script>
+<script src="../js/api-sav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/app-fmt.js"></script>
+<script src="../js/app-ui.js"></script>
+<script src="../js/ec-init.js"></script>
+<script src="../js/ec-contrats.js"></script>
+<script src="../js/ec-dossiers.js"></script>
+<script src="../js/ec-paiement.js"></script>
+<script src="../js/ec-messagerie.js"></script>
+<script src="../js/ec-sav.js"></script>
+<script src="../js/ec-profil.js"></script>
+</body>
+</html>

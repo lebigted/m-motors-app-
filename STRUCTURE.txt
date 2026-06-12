@@ -1,0 +1,87 @@
+STRUCTURE — m-motors-app (Frontend)
+=====================================
+
+Stack : HTML5 · CSS3 · JavaScript vanilla — aucun bundler, aucune dépendance npm.
+L'API Django tourne sur http://127.0.0.1:8000 (configurable dans js/api.js).
+
+
+PAGES HTML
+----------
+
+index.html                  Catalogue public — liste et filtres véhicules.
+pages/login.html            Connexion et inscription.
+pages/vehicle.html          Fiche véhicule + simulateur LLD + simulateur crédit.
+pages/dossier.html          Formulaire de dépôt de dossier (5 étapes).
+pages/backoffice.html       SPA back-office admin (onglets injectés dynamiquement).
+pages/espace-client.html    SPA espace client (même principe).
+
+pages/partials/
+  Fragments HTML injectés dans les SPAs selon l'onglet actif.
+  bo-dashboard.html, bo-dossiers.html, bo-contrats.html,
+  bo-vehicules.html, bo-clients.html, bo-sav.html, bo-tchat.html
+  ec-dossiers.html, ec-contrats.html, ec-messagerie.html,
+  ec-sav.html, ec-profil.html
+
+
+CSS — css/
+----------
+
+  variables.css       Tokens de design (couleurs, espacements, typo).
+  base.css            Reset + styles globaux.
+  layout.css          Grille, nav, structure de page.
+  components.css      Cards, badges, modales, tableaux, boutons.
+  forms.css           Champs, upload, étapes de formulaire.
+  backoffice.css      Sidebar admin, onglets back-office.
+  espace-client.css   Bandeau véhicule actif, timeline contrat.
+  vehicle.css         Mise en page fiche véhicule.
+  animations.css      Transitions canvas, loaders.
+  main.css            Importe tout dans l'ordre.
+
+
+JS — js/
+--------
+
+  Couche API (objet global `api`) :
+    api.js              Base HTTP : _req(), _headers(), gestion tokens JWT.
+    api-auth.js         Login, register, profil.
+    api-vehicles.js     Catalogue, fiche véhicule, CRUD admin.
+    api-dossiers.js     Dossiers, documents, messages, clients.
+    api-contrats.js     Workflow contrats, signatures, paiement, RDV.
+    api-sav.js          Tickets SAV.
+
+  Utilitaires globaux :
+    app.js              Nav, scroll-spy, gardes auth (chargé sur toutes les pages).
+    app-fmt.js          Formatage prix/date/statut, rendu carte véhicule.
+    app-ui.js           Toast, spinner, message d'erreur.
+
+  Pages publiques :
+    index.js            Catalogue filtrable + animation canvas hero.
+    login.js            Formulaire connexion/inscription.
+    vehicle.js          Fiche véhicule, simulateurs LLD et crédit.
+    dossier.js          Formulaire 5 étapes (sélection → envoi).
+
+  Back-office admin (préfixe bo-) :
+    bo-globals.js       Session admin, variables partagées.
+    bo-init.js          Point d'entrée, chargement initial.
+    bo-dashboard.js     KPIs, graphiques Chart.js, actions requises.
+    bo-dossiers.js      Instruction dossiers, décision, archivage, export CSV.
+    bo-vehicules.js     Gestion parc (CRUD, upload photo).
+    bo-clients.js       Liste clients, drawer fiche.
+    bo-contrats.js      Workflow admin contrats (9 étapes).
+    bo-sav.js           Tickets SAV (traitement, clôture).
+    bo-tchat.js         Messagerie admin (dossiers + SAV).
+
+  Espace client (préfixe ec-) :
+    ec-init.js          Session client, chargement initial.
+    ec-dossiers.js      Onglet Dossiers + notifications.
+    ec-contrats.js      Timeline contrat, signatures, modales.
+    ec-paiement.js      Modale paiement CB/virement/chèque, impression factures.
+    ec-messagerie.js    Messagerie dossier côté client.
+    ec-sav.js           Formulaire SAV, fil de messages.
+    ec-profil.js        Mise à jour profil, renouvellement LLD.
+
+
+IMAGES
+------
+
+  images/   Photos statiques des véhicules de démonstration.

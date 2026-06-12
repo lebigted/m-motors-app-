@@ -1,0 +1,85 @@
+FRONTEND M-MOTORS — HTML / CSS / JS
+=====================================
+
+
+PRÉREQUIS
+---------
+
+Le backend Django doit tourner sur http://127.0.0.1:8000
+Voir le repo m-motors-django pour le lancer.
+
+
+DÉMARRAGE
+---------
+
+Ouvrir index.html dans un navigateur (double-clic ou Live Server VS Code).
+Aucun bundler, aucune installation nécessaire.
+
+
+COMPTES DE TEST
+---------------
+
+  Client  →  client@test.com   /  client123
+  Admin   →  admin@mmotors.fr  /  admin123
+
+
+PARCOURS À TESTER
+-----------------
+
+CÔTÉ CLIENT (se connecter avec client@test.com)
+
+  Catalogue
+    - Filtrer par type (achat / location), voir les cartes véhicules
+    - Cliquer sur un véhicule → fiche détaillée
+    - Simulateur LLD : changer la durée (24/36/48/60 mois)
+    - Simulateur crédit : ajuster l'apport et la durée
+
+  Dépôt de dossier
+    - Bouton "Déposer un dossier" depuis une fiche véhicule
+    - Étape 1 : sélectionner un véhicule
+    - Étape 2 : remplir les infos personnelles
+    - Étape 3 : services LLD (si location)
+    - Étape 4 : uploader 4 documents (CNI, permis, revenus, RIB)
+    - Étape 5 : récapitulatif + soumettre
+
+  Espace client (onglets)
+    - Dossiers : voir le dossier soumis, statut, notifications
+    - Messagerie : envoyer un message à M-Motors
+    - SAV : ouvrir un ticket, voir le fil de réponses
+    - Contrats : visible après validation admin
+    - Profil : modifier les infos
+
+CÔTÉ ADMIN (se connecter avec admin@mmotors.fr)
+
+  Dashboard
+    - KPIs, graphiques Chart.js, bloc "Actions requises"
+
+  Dossiers
+    - Filtrer par statut / type, ouvrir un dossier
+    - Valider ou refuser avec motif, archiver, export CSV
+
+  Véhicules
+    - Ajouter / modifier, basculer statut, toggle achat ↔ location
+
+  Contrats
+    - Créer depuis un dossier validé
+    - Workflow 9 étapes : signature → paiement → RDV → livraison → actif
+
+  SAV
+    - Répondre aux tickets, clôturer
+
+  Clients
+    - Liste clients, fiche avec historique dossiers et contrats
+
+
+STRUCTURE DES FICHIERS
+----------------------
+
+  index.html                  Catalogue public (accueil)
+  pages/login.html            Connexion / inscription
+  pages/vehicle.html          Fiche véhicule + simulateurs
+  pages/dossier.html          Formulaire dépôt dossier (5 étapes)
+  pages/backoffice.html       Interface admin
+  pages/espace-client.html    Espace personnel client
+  css/                        Feuilles de style (variables, composants, layout)
+  js/                         Couche API + logique pages

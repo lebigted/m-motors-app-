@@ -1,0 +1,235 @@
+  <!-- ══ TAB CONTRATS ══ -->
+  <div id="tab-contrats" class="tab-content">
+
+    <div id="actions-requises-contrats" style="display:none;margin-bottom:1.5rem"></div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:1rem;margin-bottom:2rem" id="contrats-kpis">
+      <div class="stat-card"><div class="stat-value" id="ck-pipeline" style="color:var(--warn)">—</div><div class="stat-label">Actions en attente</div><div class="stat-sub">Validation admin requise</div></div>
+      <div class="stat-card"><div class="stat-value" id="ck-actifs" style="color:var(--success)">—</div><div class="stat-label">Contrats actifs</div><div class="stat-sub">Véhicules remis</div></div>
+      <div class="stat-card"><div class="stat-value" id="ck-lld" style="color:var(--accent)">—</div><div class="stat-label">Locations LLD</div><div class="stat-sub">Abonnements en cours</div></div>
+      <div class="stat-card"><div class="stat-value" id="ck-ca" style="color:var(--accent)">—</div><div class="stat-label">CA mensuel LLD</div><div class="stat-sub">Loyers actifs</div></div>
+      <div class="stat-card"><div class="stat-value" id="ck-km" style="color:var(--text-muted)">—</div><div class="stat-label">Km moy. parcourus</div><div class="stat-sub">Depuis début contrat</div></div>
+    </div>
+
+    <div style="display:flex;gap:.65rem;flex-wrap:wrap;align-items:center;margin-bottom:1.25rem">
+      <input class="search-bo" type="text" id="search-contrat" placeholder="Rechercher client, véhicule…" oninput="filterContrats()"/>
+      <select class="form-select" id="filter-contrat-type" onchange="filterContrats()" style="max-width:150px">
+        <option value="">Tous types</option>
+        <option value="location">Location LLD</option>
+        <option value="achat">Achat</option>
+      </select>
+      <select class="form-select" id="filter-contrat-statut" onchange="filterContrats()" style="max-width:210px">
+        <option value="">Tous statuts</option>
+        <option value="a_signer">En att. signature</option>
+        <option value="signe">Signé (à valider)</option>
+        <option value="a_payer">En att. paiement</option>
+        <option value="paye">Payé (RDV à proposer)</option>
+        <option value="rdv_propose">RDV à confirmer</option>
+        <option value="rdv_confirme">RDV confirmé (à livrer)</option>
+        <option value="actif">Actif</option>
+        <option value="termine">Terminé</option>
+        <option value="resilie">Résilié</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Réf. / Client</th><th>Véhicule</th><th>Type / Montant</th>
+            <th>Étape</th><th>Suivi</th><th>Message client</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="contrats-tbody">
+          <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">Chargement…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<!-- ══ MODAL CRÉER CONTRAT ══ -->
+<div class="modal-overlay" id="modal-create-contrat">
+  <div class="modal" style="max-width:540px">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Créer le contrat</h3>
+    <div id="cc-recap" style="margin-bottom:1rem"></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Montant <span style="color:var(--danger)">*</span></label>
+        <input class="form-input" type="number" id="cc-montant" min="0" step="0.01" placeholder="Ex : 850.00"/>
+        <p class="form-help" id="cc-montant-help"></p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Km initial <span style="color:var(--danger)">*</span></label>
+        <input class="form-input" type="number" id="cc-km" min="0" placeholder="Ex : 12500"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Date de début <span style="color:var(--danger)">*</span></label>
+        <input class="form-input" type="date" id="cc-debut"/>
+      </div>
+      <div class="form-group" id="cc-fin-group">
+        <label class="form-label">Date de fin <span style="font-weight:400;color:var(--text-muted)">(location)</span></label>
+        <input class="form-input" type="date" id="cc-fin"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes internes <span style="font-weight:400;color:var(--text-muted)">(non visibles client)</span></label>
+      <textarea class="form-textarea" id="cc-notes" style="min-height:60px" placeholder="Conditions particulières, observations…"></textarea>
+    </div>
+    <div id="cc-alert"></div>
+    <div style="display:flex;gap:.65rem;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-success" id="btn-cc" onclick="doCreateContrat()" style="background:var(--success);border-color:var(--success)">Créer le contrat</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL VALIDER SIGNATURE ══ -->
+<div class="modal-overlay" id="modal-valider-signature">
+  <div class="modal" style="max-width:500px">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Valider la signature</h3>
+    <div id="modal-vs-recap" style="margin-bottom:1rem"></div>
+    <div class="form-group">
+      <label class="form-label">Message pour le client <span style="font-weight:400;color:var(--text-muted)">(visible dans son espace)</span></label>
+      <textarea class="form-textarea" id="vs-commentaire" style="min-height:70px" placeholder="Ex : Signature bien reçue, nous avons vérifié vos informations…"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes internes <span style="font-weight:400;color:var(--text-muted)">(non visible client)</span></label>
+      <textarea class="form-textarea" id="vs-notes" style="min-height:55px" placeholder="Remarques internes…"></textarea>
+    </div>
+    <div id="modal-vs-alert"></div>
+    <div style="display:flex;gap:.65rem;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-primary" id="btn-vs" onclick="doValiderSignature()">Valider la signature</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL VALIDER PAIEMENT ══ -->
+<div class="modal-overlay" id="modal-valider-paiement">
+  <div class="modal" style="max-width:520px">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Confirmer la réception du paiement</h3>
+    <div id="modal-vp-recap" style="margin-bottom:1rem"></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Mode de paiement <span style="color:var(--danger)">*</span></label>
+        <select class="form-select" id="vp-mode">
+          <option value="">Sélectionnez…</option>
+          <option value="virement">Virement bancaire</option>
+          <option value="cb">Carte bancaire</option>
+          <option value="cheque">Chèque</option>
+          <option value="especes">Espèces</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date de réception <span style="color:var(--danger)">*</span></label>
+        <input class="form-input" type="date" id="vp-date"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Référence paiement</label>
+      <input class="form-input" type="text" id="vp-ref" placeholder="Ex : VIR-2026-0045"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message pour le client <span style="font-weight:400;color:var(--text-muted)">(visible dans son espace)</span></label>
+      <textarea class="form-textarea" id="vp-commentaire" style="min-height:70px" placeholder="Ex : Votre paiement a bien été reçu. Nous allons vous proposer des dates pour la remise des clés."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes internes</label>
+      <textarea class="form-textarea" id="vp-notes" style="min-height:55px" placeholder="Remarques internes…"></textarea>
+    </div>
+    <div id="modal-vp-alert"></div>
+    <div style="display:flex;gap:.65rem;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-success" id="btn-vp" onclick="doValiderPaiement()">Confirmer le paiement</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL PROPOSER RDV ══ -->
+<div class="modal-overlay" id="modal-proposer-rdv">
+  <div class="modal" style="max-width:540px">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Proposer des dates de remise des clés</h3>
+    <div id="modal-rdv-recap" style="margin-bottom:1rem"></div>
+    <div class="form-group">
+      <label class="form-label">Dates disponibles <span style="color:var(--danger)">*</span> <span style="font-weight:400;color:var(--text-muted)">(proposez 1 à 5 dates)</span></label>
+      <div id="rdv-dates-list" style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem"></div>
+      <button type="button" class="btn btn-secondary btn-sm" onclick="addRDVDate()" style="margin-top:.25rem">+ Ajouter une date</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Lieu de remise</label>
+      <select class="form-select" id="rdv-lieu">
+        <option value="">— Sélectionner une ville —</option>
+        <option value="Paris">Paris</option><option value="Lyon">Lyon</option>
+        <option value="Marseille">Marseille</option><option value="Bordeaux">Bordeaux</option>
+        <option value="Nice">Nice</option><option value="Toulouse">Toulouse</option>
+        <option value="Nantes">Nantes</option><option value="Strasbourg">Strasbourg</option>
+        <option value="Lille">Lille</option><option value="Rennes">Rennes</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message pour le client <span style="font-weight:400;color:var(--text-muted)">(visible dans son espace)</span></label>
+      <textarea class="form-textarea" id="rdv-commentaire" style="min-height:70px" placeholder="Ex : Merci de sélectionner l'une des dates ci-dessous pour récupérer votre véhicule."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes internes</label>
+      <textarea class="form-textarea" id="rdv-notes" style="min-height:55px" placeholder="Remarques internes…"></textarea>
+    </div>
+    <div id="modal-rdv-alert"></div>
+    <div style="display:flex;gap:.65rem;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-primary" id="btn-rdv" onclick="doProposerRDV()">Envoyer les dates au client</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL CONFIRMER LIVRAISON ══ -->
+<div class="modal-overlay" id="modal-livrer">
+  <div class="modal" style="max-width:520px">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Remise des clés — double signature</h3>
+    <div id="modal-liv-recap" style="margin-bottom:1rem"></div>
+    <div id="modal-liv-reception-client" style="display:none;margin-bottom:.75rem"></div>
+    <div class="form-group">
+      <label class="form-label">Date de remise effective <span style="color:var(--danger)">*</span></label>
+      <input class="form-input" type="date" id="liv-date"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Votre signature (conseiller M-Motors) <span style="color:var(--danger)">*</span></label>
+      <input class="form-input" type="text" id="liv-admin-sig"
+        style="font-family:'Segoe Script','Brush Script MT',cursive;font-size:1.1rem;color:#1e3a5f"
+        placeholder="Tapez votre nom complet"
+        oninput="document.getElementById('liv-admin-preview').textContent=this.value"/>
+      <div id="liv-admin-preview" style="margin-top:.4rem;padding:.5rem .85rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:.4rem;min-height:36px;font-family:'Segoe Script','Brush Script MT',cursive;font-size:1.15rem;color:#1e3a5f"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message pour le client <span style="font-weight:400;color:var(--text-muted)">(visible dans son espace)</span></label>
+      <textarea class="form-textarea" id="liv-commentaire" style="min-height:65px" placeholder="Ex : Félicitations ! Votre véhicule vous a été remis ce jour. Bienvenue chez M-Motors."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes internes</label>
+      <textarea class="form-textarea" id="liv-notes" style="min-height:50px" placeholder="Remarques internes…"></textarea>
+    </div>
+    <div id="modal-liv-alert"></div>
+    <div style="display:flex;gap:.65rem;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-success" id="btn-liv" onclick="doLivrer()">Confirmer la remise</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL DÉTAIL CONTRAT ══ -->
+<div class="modal-overlay" id="modal-contrat-detail">
+  <div class="modal" style="max-width:640px;max-height:90vh;display:flex;flex-direction:column;padding:0;overflow:hidden">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);flex-shrink:0">
+      <h3 style="margin:0">Détail du contrat</h3>
+      <button class="btn btn-secondary btn-sm" onclick="closeModals()">Fermer</button>
+    </div>
+    <div id="modal-cd-content" style="overflow-y:auto;padding:1.25rem 1.5rem;flex:1"></div>
+  </div>
+</div>

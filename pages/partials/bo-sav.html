@@ -1,0 +1,15 @@
+  <!-- ══ TAB SAV ══ -->
+  <div id="tab-sav" class="tab-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+      <h3 style="margin:0;color:var(--primary);font-size:1rem">Tickets SAV <span id="sav-pending-count" style="font-size:.8rem;color:var(--text-muted);font-weight:400"></span></h3>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <select id="sav-filter" class="form-input" style="font-size:.83rem;padding:.35rem .65rem;width:auto" onchange="loadSAVAdmin()">
+          <option value="">Tous</option>
+          <option value="en_attente">En attente</option>
+          <option value="accepte">Suivi ouvert</option>
+          <option value="refuse">Non retenus</option>
+        </select>
+      </div>
+    </div>
+    <div id="sav-admin-list"></div>
+  </div>

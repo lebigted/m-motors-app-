@@ -1,0 +1,127 @@
+  <!-- ══ TAB VÉHICULES ══ -->
+  <div id="tab-vehicules" class="tab-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem">
+      <div style="display:flex;gap:.65rem;flex-wrap:wrap;align-items:center">
+        <input class="search-bo" type="text" id="search-v" placeholder="Rechercher marque, modèle…" oninput="loadVehicles()"/>
+        <select class="form-select" id="filter-type-bo"   onchange="loadVehicles()" style="max-width:150px">
+          <option value="">Tous modes</option>
+          <option value="achat">Achat</option>
+          <option value="location">Location</option>
+        </select>
+        <select class="form-select" id="filter-status-bo" onchange="loadVehicles()" style="max-width:155px">
+          <option value="">Tous statuts</option>
+          <option value="disponible">Disponible</option>
+          <option value="reserve">Réservé</option>
+          <option value="vendu">Vendu</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="openVehicleModal()">+ Ajouter un véhicule</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Photo</th><th>Véhicule</th><th>Carburant / Km</th><th>Mode</th><th>Prix</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody id="vehicles-tbody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+<!-- ══ MODAL VÉHICULE ══ -->
+<div class="modal-overlay" id="modal-vehicle">
+  <div class="modal" style="max-width:600px;max-height:90vh;overflow-y:auto">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3 id="modal-vehicle-title">Ajouter un véhicule</h3>
+    <input type="hidden" id="v-id"/>
+    <div class="form-group">
+      <label class="form-label">Photo principale</label>
+      <div id="photo-preview-wrap">
+        <div class="photo-placeholder" onclick="document.getElementById('v-photo').click()">
+          Cliquez pour ajouter une photo (JPG, PNG)
+        </div>
+      </div>
+      <input type="file" id="v-photo" accept="image/*" style="display:none" onchange="previewPhoto(this)"/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Marque</label>
+        <select class="form-select" id="v-brand">
+          <option>Renault</option><option>Peugeot</option><option>BMW</option>
+          <option>Dacia</option><option>Toyota</option><option>Volkswagen</option>
+          <option>Citroen</option><option>Ford</option><option>Mercedes</option>
+          <option>Audi</option><option>Opel</option><option>Hyundai</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Modèle</label>
+        <input class="form-input" type="text" id="v-model" placeholder="ex : Clio"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Année</label><input class="form-input" type="number" id="v-year" min="2000" max="2026"/></div>
+      <div class="form-group"><label class="form-label">Kilométrage</label><input class="form-input" type="number" id="v-km" min="0" placeholder="0"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Carburant</label>
+        <select class="form-select" id="v-fuel"><option>Essence</option><option>Diesel</option><option>Hybride</option><option>Électrique</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Couleur</label><input class="form-input" type="text" id="v-color" placeholder="ex : Gris"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Mode</label>
+        <select class="form-select" id="v-type" onchange="togglePricing()">
+          <option value="achat">Achat</option>
+          <option value="location">Location LLD</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Statut</label>
+        <select class="form-select" id="v-status">
+          <option value="disponible">Disponible</option>
+          <option value="reserve">Réservé</option>
+          <option value="vendu">Vendu</option>
+        </select>
+      </div>
+    </div>
+    <div id="price-achat-group" class="form-group">
+      <label class="form-label">Prix de vente (€)</label>
+      <input class="form-input" type="number" id="v-price" min="0" placeholder="12 500"/>
+    </div>
+    <div id="price-location-group" class="form-group hidden">
+      <label class="form-label">Loyer mensuel (€/mois)</label>
+      <input class="form-input" type="number" id="v-monthly" min="0" placeholder="350"/>
+    </div>
+    <div id="services-group">
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;margin-bottom:1rem">
+        <div id="services-header-note" style="font-weight:700;font-size:.88rem;color:var(--primary);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.04em">Services inclus dans l'abonnement Location LLD</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;cursor:pointer">
+            <input type="checkbox" id="svc-assurance" checked style="width:1rem;height:1rem"/>Assurance tous risques
+          </label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;cursor:pointer">
+            <input type="checkbox" id="svc-assistance" checked style="width:1rem;height:1rem"/>Assistance dépannage 24/7
+          </label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;cursor:pointer">
+            <input type="checkbox" id="svc-entretien" checked style="width:1rem;height:1rem"/>Entretien &amp; SAV
+          </label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;cursor:pointer">
+            <input type="checkbox" id="svc-ct" checked style="width:1rem;height:1rem"/>Contrôle technique
+          </label>
+        </div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+          <div style="font-weight:700;font-size:.88rem;color:var(--primary);text-transform:uppercase;letter-spacing:.04em">Options supplémentaires</div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="addOption()">+ Ajouter une option</button>
+        </div>
+        <div id="options-list" style="display:flex;flex-direction:column;gap:.4rem"></div>
+        <p class="form-help" style="margin-top:.5rem">Ex : GPS connecté, Siège enfant, Assurance conducteur supplémentaire…</p>
+      </div>
+    </div>
+    <div id="modal-vehicle-alert"></div>
+    <div style="display:flex;justify-content:flex-end;gap:.75rem;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-primary" id="btn-save-vehicle" onclick="saveVehicle()">Enregistrer</button>
+    </div>
+  </div>
+</div>

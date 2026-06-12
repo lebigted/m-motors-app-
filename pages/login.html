@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M-Motors | Connexion</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+</head>
+<body>
+
+<header class="nav" id="main-nav"></header>
+
+<div style="min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:2rem 1rem;background:var(--bg)">
+  <div style="width:100%;max-width:440px">
+
+    <div class="text-center mb-3">
+      <div style="font-size:2.5rem;margin-bottom:.5rem"></div>
+      <h1 style="font-size:1.5rem;font-weight:800;color:var(--primary)">M-Motors</h1>
+      <p class="text-muted">Votre espace personnel</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('login')">Se connecter</button>
+      <button class="tab-btn"        onclick="showTab('register')">Créer un compte</button>
+    </div>
+
+    <!-- CONNEXION -->
+    <div id="tab-login" class="form-card">
+      <div id="login-alert"></div>
+      <div class="form-group">
+        <label class="form-label">Adresse e-mail</label>
+        <input class="form-input" type="email" id="login-email" placeholder="votre@email.fr" autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input class="form-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+      <button class="btn btn-primary btn-full btn-lg mt-2" id="btn-login" onclick="doLogin()">Se connecter</button>
+      <div style="text-align:center;margin-top:.75rem">
+        <a href="#" onclick="openResetModal();return false;" style="font-size:.84rem;color:var(--accent);text-decoration:none">Mot de passe oublié ?</a>
+      </div>
+      <div class="alert alert-info mt-2" style="font-size:.82rem">
+        <div>
+          <strong>Comptes de test :</strong><br>
+           Client : client@test.com / client123<br>
+           Admin : admin@mmotors.fr / admin123
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL RÉINITIALISATION MOT DE PASSE -->
+    <div id="modal-reset" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:1rem">
+      <div style="background:#fff;border-radius:1rem;padding:2rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+          <h2 style="font-size:1.15rem;font-weight:800;color:var(--primary);margin:0">Mot de passe oublié</h2>
+          <button onclick="closeResetModal()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted);line-height:1">&times;</button>
+        </div>
+
+        <!-- Étape 1 : demande par email -->
+        <div id="reset-step1">
+          <p style="font-size:.875rem;color:var(--text-muted);margin-bottom:1rem">Entrez votre adresse e-mail. Un code de réinitialisation vous sera fourni.</p>
+          <div id="reset-alert1"></div>
+          <div class="form-group">
+            <label class="form-label">Adresse e-mail</label>
+            <input class="form-input" type="email" id="reset-email" placeholder="votre@email.fr"/>
+          </div>
+          <button class="btn btn-primary btn-full" id="btn-reset1" onclick="doResetRequest()">Envoyer</button>
+        </div>
+
+        <!-- Étape 2 : saisie du code + nouveau mot de passe -->
+        <div id="reset-step2" style="display:none">
+          <div class="alert alert-info" style="font-size:.82rem;margin-bottom:1rem" id="reset-debug-info"></div>
+          <div id="reset-alert2"></div>
+          <div class="form-group">
+            <label class="form-label">Code de réinitialisation</label>
+            <input class="form-input" type="text" id="reset-token" placeholder="Collez le code reçu" style="font-family:monospace;font-size:.82rem"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nouveau mot de passe</label>
+            <input class="form-input" type="password" id="reset-pw1" placeholder="Minimum 6 caractères"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirmer le mot de passe</label>
+            <input class="form-input" type="password" id="reset-pw2" placeholder="••••••••"/>
+          </div>
+          <button class="btn btn-primary btn-full" id="btn-reset2" onclick="doResetConfirm()">Réinitialiser</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSCRIPTION -->
+    <div id="tab-register" class="form-card hidden">
+      <div id="register-alert"></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nom</label>
+          <input class="form-input" type="text" id="reg-nom" placeholder="Dupont"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prénom</label>
+          <input class="form-input" type="text" id="reg-prenom" placeholder="Jean"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Adresse e-mail</label>
+        <input class="form-input" type="email" id="reg-email" placeholder="votre@email.fr"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Téléphone</label>
+        <input class="form-input" type="tel" id="reg-tel" placeholder="06 12 34 56 78"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input class="form-input" type="password" id="reg-password" placeholder="Minimum 6 caractères"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirmer le mot de passe</label>
+        <input class="form-input" type="password" id="reg-password2" placeholder="••••••••"/>
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-start;gap:.75rem">
+        <input type="checkbox" id="reg-rgpd" style="margin-top:.25rem;width:1rem;height:1rem;flex-shrink:0"/>
+        <label for="reg-rgpd" style="font-size:.85rem;color:var(--muted)">
+          J'accepte que M-Motors traite mes données personnelles (RGPD).
+        </label>
+      </div>
+      <button class="btn btn-primary btn-full btn-lg" id="btn-register" onclick="doRegister()">Créer mon compte</button>
+    </div>
+
+  </div>
+</div>
+
+<footer class="site-footer"><strong>M-Motors</strong> — Spécialiste véhicules d'occasion depuis 1987</footer>
+
+<script src="../js/api.js"></script>
+<script src="../js/api-auth.js"></script>
+<script src="../js/api-vehicles.js"></script>
+<script src="../js/api-dossiers.js"></script>
+<script src="../js/api-contrats.js"></script>
+<script src="../js/api-sav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/app-fmt.js"></script>
+<script src="../js/app-ui.js"></script>
+<script src="../js/login.js"></script>
+</body>
+</html>

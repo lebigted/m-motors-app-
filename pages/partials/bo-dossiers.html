@@ -1,0 +1,47 @@
+  <!-- ══ TAB DOSSIERS ══ -->
+  <div id="tab-dossiers" class="tab-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem">
+      <div style="display:flex;gap:.65rem;flex-wrap:wrap;align-items:center">
+        <input class="search-bo" type="text" id="search-d" placeholder="Rechercher client, véhicule…" oninput="loadDossiers()"/>
+        <select class="form-select" id="filter-dossier-status" onchange="loadDossiers()" style="max-width:180px">
+          <option value="">Tous statuts</option>
+          <option value="soumis">Soumis</option>
+          <option value="en_cours">En cours</option>
+          <option value="valide">Validés</option>
+          <option value="refuse">Refusés</option>
+        </select>
+        <select class="form-select" id="filter-dossier-type" onchange="loadDossiers()" style="max-width:145px">
+          <option value="">Tous types</option>
+          <option value="achat">Achat</option>
+          <option value="location">Location</option>
+        </select>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="exportCSV()">Exporter CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Référence</th><th>Client</th><th>Véhicule</th><th>Type</th><th>Revenus/mois</th><th>Date</th><th>Docs</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody id="dossiers-tbody"><tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--muted)">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+<!-- ══ MODAL DOSSIER ══ -->
+<div class="modal-overlay" id="modal-dossier">
+  <div class="modal" style="max-width:620px;max-height:90vh;overflow-y:auto">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Instruire le dossier</h3>
+    <div id="modal-dossier-recap"></div>
+    <div class="form-group mt-2">
+      <label class="form-label">Motif / Commentaire (obligatoire si refus)</label>
+      <textarea class="form-textarea" id="d-motif" style="min-height:80px" placeholder="Décision et commentaire pour le client…"></textarea>
+    </div>
+    <div id="modal-dossier-alert"></div>
+    <div style="display:flex;gap:.65rem;margin-top:1rem;flex-wrap:wrap">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-outline"   onclick="decideDossier('en_cours')">Mettre en cours</button>
+      <button class="btn btn-primary"   onclick="decideDossier('valide')">Valider</button>
+      <button class="btn btn-danger"    onclick="decideDossier('refuse')">Refuser</button>
+    </div>
+  </div>
+</div>

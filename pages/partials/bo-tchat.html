@@ -1,0 +1,33 @@
+  <!-- ══ TAB TCHAT ══ -->
+  <div id="tab-tchat" class="tab-content">
+    <div style="display:flex;height:calc(100vh - 220px);min-height:480px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+
+      <div style="width:300px;min-width:220px;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--bg)">
+        <div style="padding:.75rem 1rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:.5rem">
+          Conversations
+          <span id="tchat-unread-total" style="display:none;background:var(--danger);color:#fff;border-radius:2rem;font-size:.68rem;padding:.1rem .45rem;font-weight:700"></span>
+        </div>
+        <input class="form-input" id="tchat-search" placeholder="Chercher un client…"
+          style="margin:.6rem;width:calc(100% - 1.2rem);font-size:.83rem" oninput="renderTchatList()">
+        <div id="tchat-list" style="overflow-y:auto;flex:1"></div>
+      </div>
+
+      <div style="flex:1;display:flex;flex-direction:column;background:#fff">
+        <div id="tchat-header" style="padding:.75rem 1.25rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.9rem;color:var(--primary);display:flex;align-items:center;gap:.75rem">
+          <span id="tchat-header-label" style="color:var(--text-muted);font-weight:400;font-size:.85rem">Sélectionnez une conversation</span>
+          <div id="tchat-header-actions" style="margin-left:auto"></div>
+        </div>
+        <div id="tchat-thread" style="flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.6rem">
+          <div style="margin:auto;text-align:center;color:var(--text-muted);font-size:.88rem">
+            Choisissez un client dans la liste pour afficher la conversation.
+          </div>
+        </div>
+        <div id="tchat-input-zone" style="padding:.75rem 1rem;border-top:1px solid var(--border);display:flex;gap:.5rem">
+          <input type="text" id="tchat-input" class="form-input" placeholder="Répondre au client…"
+            style="flex:1" disabled onkeydown="if(event.key==='Enter')sendTchatMsg()">
+          <button class="btn btn-primary btn-sm" onclick="sendTchatMsg()" disabled id="tchat-send-btn">Envoyer</button>
+        </div>
+      </div>
+
+    </div>
+  </div>

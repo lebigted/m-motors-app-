@@ -1,0 +1,25 @@
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:2.25rem}
+.form-group{margin-bottom:1.35rem}
+.form-label{display:block;font-weight:600;font-size:.83rem;color:var(--text);margin-bottom:.45rem;letter-spacing:.01em;text-transform:uppercase}
+.form-input,.form-select,.form-textarea{width:100%;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font:inherit;font-size:.92rem;background:var(--white);color:var(--text);transition:border-color .15s,box-shadow .15s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.form-textarea{resize:vertical;min-height:100px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+.form-help{font-size:.78rem;color:var(--text-muted);margin-top:.3rem}
+.form-error{font-size:.8rem;color:var(--danger);margin-top:.3rem}
+
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:2rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg)}
+.upload-zone:hover{border-color:var(--accent);background:var(--accent-light)}
+.upload-zone input{display:none}
+.upload-zone p{color:var(--text-muted);font-size:.875rem;margin-top:.5rem}
+
+.step-indicator{padding:.5rem 1rem;border-radius:.4rem;font-size:.8rem;font-weight:600;color:var(--text-muted);background:var(--bg);border:1.5px solid var(--border);flex:1;text-align:center;transition:all .2s}
+.step-indicator.active{background:var(--accent-light);color:var(--accent);border-color:var(--accent)}
+.step-indicator.done{background:var(--success-light);color:var(--success);border-color:var(--success)}
+.step-sep{color:var(--text-muted);padding:0 .35rem;flex-shrink:0}
+
+.alert{padding:.9rem 1.1rem;border-radius:var(--radius-sm);margin-bottom:1rem;font-size:.875rem;display:flex;align-items:flex-start;gap:.6rem}
+.alert-success{background:var(--success-light);color:#065f46;border:1px solid #6ee7b7}
+.alert-danger{background:var(--danger-light);color:#991b1b;border:1px solid #fca5a5}
+.alert-info{background:var(--accent-light);color:#1e40af;border:1px solid #93c5fd}
+.alert-warn{background:var(--warn-light);color:#92400e;border:1px solid #fcd34d}

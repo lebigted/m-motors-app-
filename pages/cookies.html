@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M-Motors | Gestion des cookies</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+</head>
+<body>
+<header class="nav" id="main-nav"></header>
+<div class="page-header"><div class="container"><h1>Gestion des cookies</h1><p>Paramétrez vos préférences de cookies</p></div></div>
+<div class="content-wrap" style="max-width:820px">
+  <div class="form-card" style="display:flex;flex-direction:column;gap:1.5rem">
+
+    <section>
+      <h2 style="font-size:1.05rem;font-weight:700;margin-bottom:.6rem">Qu'est-ce qu'un cookie ?</h2>
+      <p>Un cookie est un petit fichier texte déposé sur votre terminal (ordinateur, tablette, smartphone) lors de votre visite sur notre site. Il permet de mémoriser certaines informations pour améliorer votre expérience.</p>
+    </section>
+
+    <section>
+      <h2 style="font-size:1.05rem;font-weight:700;margin-bottom:.8rem">Types de cookies utilisés</h2>
+
+      <div class="card" style="margin-bottom:.75rem">
+        <div class="card-body" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+          <div>
+            <div style="font-weight:700;margin-bottom:.25rem">Cookies essentiels</div>
+            <p class="text-sm text-muted">Nécessaires au fonctionnement du site (session, authentification JWT). Ne peuvent pas être désactivés.</p>
+          </div>
+          <span class="status-badge status-valide">Toujours actifs</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:.75rem">
+        <div class="card-body" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+          <div>
+            <div style="font-weight:700;margin-bottom:.25rem">Cookies de préférences</div>
+            <p class="text-sm text-muted">Mémorisent vos choix (mode de recherche, filtres) pour personnaliser votre expérience.</p>
+          </div>
+          <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+            <input type="checkbox" id="pref-cookies" style="width:1rem;height:1rem"/>
+            <span class="text-sm" id="pref-label">Désactivés</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+          <div>
+            <div style="font-weight:700;margin-bottom:.25rem">Cookies analytiques</div>
+            <p class="text-sm text-muted">Mesure d'audience anonymisée pour améliorer nos services. Aucune donnée nominative transmise.</p>
+          </div>
+          <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+            <input type="checkbox" id="analytics-cookies" style="width:1rem;height:1rem"/>
+            <span class="text-sm" id="analytics-label">Désactivés</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="savePrefs()">Enregistrer mes préférences</button>
+      <button class="btn btn-secondary" onclick="refuseAll()">Tout refuser</button>
+      <button class="btn btn-secondary" onclick="acceptAll()">Tout accepter</button>
+    </div>
+
+    <p class="text-muted text-sm">Dernière mise à jour : juin 2026 — Conformément au RGPD et aux recommandations de la CNIL.</p>
+  </div>
+</div>
+<script src="../js/api.js"></script>
+<script src="../js/api-auth.js"></script>
+<script src="../js/api-vehicles.js"></script>
+<script src="../js/api-dossiers.js"></script>
+<script src="../js/api-contrats.js"></script>
+<script src="../js/api-sav.js"></script><script src="../js/app.js"></script>
+<script src="../js/app-fmt.js"></script>
+<script src="../js/app-ui.js"></script>
+<script>
+  renderNav('');
+  const prefs = JSON.parse(localStorage.getItem('mm_cookie_prefs') || '{}');
+  document.getElementById('pref-cookies').checked      = !!prefs.pref;
+  document.getElementById('analytics-cookies').checked = !!prefs.analytics;
+  updateLabels();
+
+  function updateLabels() {
+    document.getElementById('pref-label').textContent      = document.getElementById('pref-cookies').checked      ? 'Activés' : 'Désactivés';
+    document.getElementById('analytics-label').textContent = document.getElementById('analytics-cookies').checked ? 'Activés' : 'Désactivés';
+  }
+  document.getElementById('pref-cookies').addEventListener('change', updateLabels);
+  document.getElementById('analytics-cookies').addEventListener('change', updateLabels);
+
+  function savePrefs() {
+    const p = { pref: document.getElementById('pref-cookies').checked, analytics: document.getElementById('analytics-cookies').checked };
+    localStorage.setItem('mm_cookie_prefs', JSON.stringify(p));
+    localStorage.setItem('mm_cookies', 'custom');
+    toast('Préférences enregistrées.', 'success');
+  }
+  function acceptAll() {
+    document.getElementById('pref-cookies').checked = document.getElementById('analytics-cookies').checked = true;
+    updateLabels(); savePrefs();
+  }
+  function refuseAll() {
+    document.getElementById('pref-cookies').checked = document.getElementById('analytics-cookies').checked = false;
+    updateLabels(); savePrefs();
+  }
+</script>
+</body>
+</html>

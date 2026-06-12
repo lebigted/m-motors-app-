@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="M-Motors — Spécialiste véhicules d'occasion. Location longue durée et achat avec dossier 100% dématérialisé."/>
+  <title>M-Motors | Location longue durée &amp; Achat de véhicules</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+  <link rel="stylesheet" href="css/main.css"/>
+</head>
+<body>
+
+<header class="nav" id="main-nav"></header>
+
+<section class="hero">
+  <!-- Animation canvas : voitures et route -->
+  <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.55"></canvas>
+  <div class="hero-inner" style="position:relative;z-index:1">
+    <h1>Votre prochain véhicule.</h1>
+    <p>Achat ou location longue durée — dossier 100 % en ligne, traitement sous 48h ouvrées.</p>
+    <div class="hero-badges">
+      <span class="badge">Assurance tous risques</span>
+      <span class="badge">Entretien &amp; SAV inclus</span>
+      <span class="badge">Assistance 24h/24</span>
+      <span class="badge">Contrôle technique</span>
+    </div>
+    <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+      <a href="#vehicules" class="btn btn-primary btn-lg">Parcourir les véhicules</a>
+      <a href="#services"  class="btn btn-lg" style="background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.25)">Découvrir la LLD</a>
+    </div>
+  </div>
+  <!-- Vague de séparation hero → contenu -->
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,10 1440,40 L1440,70 L0,70 Z" fill="#f8fafc"/>
+    </svg>
+  </div>
+</section>
+
+<div class="container" id="vehicules">
+  <div class="search-panel">
+    <div class="search-tabs">
+      <button class="search-tab active" data-mode="achat"    onclick="setMode('achat')">Achat</button>
+      <button class="search-tab"        data-mode="location" onclick="setMode('location')">Location LLD</button>
+    </div>
+    <div class="search-fields">
+      <div class="form-group" style="margin:0">
+        <label class="form-label">Marque</label>
+        <select class="form-select" id="f-brand">
+          <option value="">Toutes</option>
+          <option>Renault</option><option>Peugeot</option><option>BMW</option>
+          <option>Dacia</option><option>Toyota</option><option>Volkswagen</option>
+          <option>Citroen</option><option>Ford</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin:0">
+        <label class="form-label">Carburant</label>
+        <select class="form-select" id="f-fuel">
+          <option value="">Tous</option>
+          <option>Essence</option><option>Diesel</option><option>Hybride</option><option>Électrique</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin:0">
+        <label class="form-label" id="price-label">Budget max (€)</label>
+        <input class="form-input" type="number" id="f-price" placeholder="15 000" min="0"/>
+      </div>
+      <button class="btn btn-primary btn-search" onclick="doSearch()" style="height:44px;align-self:end">Rechercher</button>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="padding-bottom:3.5rem">
+  <div id="result-count" class="text-muted text-sm" style="margin-bottom:1rem"></div>
+  <div class="grid-3" id="results"></div>
+  <div id="empty-results" class="hidden">
+    <div class="empty-state">
+      <span class="empty-icon">—</span>
+      <h3>Aucun véhicule trouvé</h3>
+      <p>Essayez d'élargir vos critères de recherche.</p>
+    </div>
+  </div>
+</div>
+
+<section class="services-section" id="services">
+  <div class="container">
+
+    <!-- Bandeau "Tout inclus" -->
+    <div class="fade-in" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:1.25rem;padding:2rem 2.5rem;margin-bottom:3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem">
+      <div>
+        <span class="section-eyebrow">Location Longue Durée avec option d'achat</span>
+        <h2 style="color:#fff;font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin:.4rem 0 .5rem">4 services inclus dans votre abonnement</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:.95rem">Aucun frais caché. Tout est compris dans votre mensualité dès la signature du contrat.</p>
+      </div>
+      <a href="index.html#vehicules" class="btn btn-lg" style="background:#fff;color:var(--primary);font-weight:700;flex-shrink:0" onclick="event.preventDefault();navScrollTo('vehicules')">
+        Voir les offres location
+      </a>
+    </div>
+
+    <!-- 4 services -->
+    <div class="grid-4">
+      <div class="service-card fade-in" style="border:1px solid rgba(255,255,255,.15)">
+        <div class="service-icon-box" style="font-size:.85rem;width:60px;height:60px">ATR</div>
+        <h3>Assurance tous risques</h3>
+        <p>Couverture complète incluse dans votre mensualité, sans franchise cachée.</p>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.1);font-size:.78rem;color:rgba(255,255,255,.4)">Inclus dans l'abonnement</div>
+      </div>
+      <div class="service-card fade-in" style="border:1px solid rgba(255,255,255,.15)">
+        <div class="service-icon-box" style="font-size:.85rem;width:60px;height:60px">24/7</div>
+        <h3>Assistance dépannage</h3>
+        <p>Intervention partout en France, 24h/24 et 7j/7, quelle que soit la panne.</p>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.1);font-size:.78rem;color:rgba(255,255,255,.4)">Inclus dans l'abonnement</div>
+      </div>
+      <div class="service-card fade-in" style="border:1px solid rgba(255,255,255,.15)">
+        <div class="service-icon-box" style="font-size:.85rem;width:60px;height:60px">SAV</div>
+        <h3>Entretien &amp; SAV</h3>
+        <p>Révisions, vidanges, pièces d'usure — pris en charge par nos techniciens certifiés.</p>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.1);font-size:.78rem;color:rgba(255,255,255,.4)">Inclus dans l'abonnement</div>
+      </div>
+      <div class="service-card fade-in" style="border:1px solid rgba(255,255,255,.15)">
+        <div class="service-icon-box" style="font-size:.85rem;width:60px;height:60px">CT</div>
+        <h3>Contrôle technique</h3>
+        <p>Organisé et pris en charge par M-Motors tout au long de votre contrat.</p>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.1);font-size:.78rem;color:rgba(255,255,255,.4)">Inclus dans l'abonnement</div>
+      </div>
+    </div>
+
+    <!-- Mention option d'achat -->
+    <div class="fade-in" style="text-align:center;margin-top:2rem;padding:1.25rem;background:rgba(255,255,255,.05);border-radius:.75rem;border:1px solid rgba(255,255,255,.1)">
+      <p style="color:rgba(255,255,255,.7);font-size:.92rem">
+        <strong style="color:#fff">Option d'achat disponible</strong> — À la fin de votre contrat de location, vous pouvez choisir d'acquérir définitivement le véhicule.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Vague services → steps -->
+<div style="background:var(--primary);line-height:0">
+  <svg viewBox="0 0 1440 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:50px">
+    <path d="M0,0 C360,50 1080,0 1440,30 L1440,50 L0,50 Z" fill="#fff"/>
+  </svg>
+</div>
+
+<!-- À PROPOS -->
+<section id="apropos" class="section" style="background:var(--white);border-top:1px solid var(--border)">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center">
+      <div class="fade-in">
+        <span class="section-eyebrow">Qui sommes-nous</span>
+        <h2 class="section-title">M-Motors, spécialiste véhicules d'occasion depuis 1987</h2>
+        <p style="color:var(--text-muted);line-height:1.8;margin-bottom:1.25rem">
+          Créée en 1987, M-Motors s'est imposée comme l'une des références nationales dans la vente de véhicules d'occasion. Notre succès repose sur un engagement constant envers la satisfaction client, avec une gamme variée de marques, de modèles, de motorisations et de prix pour répondre à tous les budgets.
+        </p>
+        <p style="color:var(--text-muted);line-height:1.8;margin-bottom:1.5rem">
+          Chaque véhicule de notre catalogue garantit un bon état mécanique, un entretien régulier, des contrôles techniques approfondis et des remises en état adaptées pour assurer fiabilité et sécurité à nos clients.
+        </p>
+        <div style="display:flex;gap:2rem;flex-wrap:wrap">
+          <div>
+            <div style="font-size:1.75rem;font-weight:900;color:var(--primary)">800</div>
+            <div style="font-size:.82rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">Collaborateurs</div>
+          </div>
+          <div>
+            <div style="font-size:1.75rem;font-weight:900;color:var(--primary)">1 million</div>
+            <div style="font-size:.82rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">Clients nationaux</div>
+          </div>
+          <div>
+            <div style="font-size:1.75rem;font-weight:900;color:var(--primary)">Depuis 1987</div>
+            <div style="font-size:.82rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">D'expérience</div>
+          </div>
+        </div>
+      </div>
+      <div class="fade-in">
+        <div style="display:flex;flex-direction:column;gap:.85rem">
+          <div class="card" style="padding:1.1rem 1.4rem;display:flex;align-items:flex-start;gap:1rem">
+            <div style="background:var(--accent-light);color:var(--accent);font-weight:700;font-size:.72rem;padding:.35rem .6rem;border-radius:.4rem;flex-shrink:0;margin-top:.1rem">ESSAI</div>
+            <div>
+              <div style="font-weight:700;font-size:.95rem;margin-bottom:.2rem">Essai routier</div>
+              <div style="font-size:.85rem;color:var(--text-muted)">Essayez le véhicule avant l'achat pour vérifier confort et adéquation à vos besoins.</div>
+            </div>
+          </div>
+          <div class="card" style="padding:1.1rem 1.4rem;display:flex;align-items:flex-start;gap:1rem">
+            <div style="background:var(--accent-light);color:var(--accent);font-weight:700;font-size:.72rem;padding:.35rem .6rem;border-radius:.4rem;flex-shrink:0;margin-top:.1rem">SAV</div>
+            <div>
+              <div style="font-weight:700;font-size:.95rem;margin-bottom:.2rem">Conseil personnalisé</div>
+              <div style="font-size:.85rem;color:var(--text-muted)">Notre service commercial vous accompagne dans le choix du véhicule le plus adapté.</div>
+            </div>
+          </div>
+          <div class="card" style="padding:1.1rem 1.4rem;display:flex;align-items:flex-start;gap:1rem">
+            <div style="background:var(--accent-light);color:var(--accent);font-weight:700;font-size:.72rem;padding:.35rem .6rem;border-radius:.4rem;flex-shrink:0;margin-top:.1rem">FIN</div>
+            <div>
+              <div style="font-weight:700;font-size:.95rem;margin-bottom:.2rem">Financement adapté</div>
+              <div style="font-size:.85rem;color:var(--text-muted)">Solutions de financement en partenariat avec des organismes financiers, adaptées à votre budget.</div>
+            </div>
+          </div>
+          <div class="card" style="padding:1.1rem 1.4rem;display:flex;align-items:flex-start;gap:1rem">
+            <div style="background:var(--accent-light);color:var(--accent);font-weight:700;font-size:.72rem;padding:.35rem .6rem;border-radius:.4rem;flex-shrink:0;margin-top:.1rem">REP</div>
+            <div>
+              <div style="font-weight:700;font-size:.95rem;margin-bottom:.2rem">Reprise de votre ancien véhicule</div>
+              <div style="font-size:.85rem;color:var(--text-muted)">M-Motors reprend votre ancien véhicule pour faciliter votre achat.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Vague about → steps -->
+<div style="background:var(--white);line-height:0;border-top:1px solid var(--border)">
+  <svg viewBox="0 0 1440 30" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:30px">
+    <path d="M0,15 C480,30 960,0 1440,15 L1440,30 L0,30 Z" fill="#fff"/>
+  </svg>
+</div>
+
+<section class="steps-section">
+  <div class="container">
+    <div class="text-center mb-3">
+      <span class="section-eyebrow">Comment ça marche</span>
+      <h2 class="section-title">3 étapes simples</h2>
+      <p class="section-sub">De la recherche à la remise des clés, tout se fait en ligne</p>
+    </div>
+    <div class="grid-3">
+      <div class="card fade-in"><div class="card-body step-card"><div class="step-number">1</div><h3>Recherchez</h3><p>Filtrez notre catalogue par mode, marque et budget. Consultez chaque fiche véhicule en détail.</p></div></div>
+      <div class="card fade-in"><div class="card-body step-card"><div class="step-number">2</div><h3>Déposez votre dossier</h3><p>Créez votre espace client et soumettez vos documents en quelques minutes. 100 % dématérialisé.</p></div></div>
+      <div class="card fade-in"><div class="card-body step-card"><div class="step-number">3</div><h3>Récupérez vos clés</h3><p>Après validation sous 48h, prenez rendez-vous dans l'une de nos agences partenaires.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA simple -->
+<section class="section" style="background:var(--primary);color:#fff;text-align:center;padding:4rem 2rem">
+  <div class="container" style="max-width:620px">
+    <h2 class="fade-in" style="font-size:1.75rem;font-weight:800;color:#fff;letter-spacing:-.025em;margin-bottom:.85rem">
+      Prêt à trouver votre véhicule ?
+    </h2>
+    <p class="fade-in" style="color:rgba(255,255,255,.5);margin-bottom:2rem;font-size:.95rem;line-height:1.7">
+      Déposez votre dossier en ligne en quelques minutes.<br>Notre équipe vous répond sous 48h ouvrées.
+    </p>
+    <div class="fade-in" style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+      <a href="index.html#vehicules" class="btn btn-primary btn-lg" onclick="event.preventDefault();navScrollTo('vehicules')">Voir les véhicules</a>
+      <a href="login.html" class="btn btn-lg" style="background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.2)">Créer un compte</a>
+    </div>
+  </div>
+</section>
+
+<footer style="background:var(--primary);color:rgba(255,255,255,.4);padding:4rem 2rem 2rem">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2.5rem;margin-bottom:3rem">
+      <div>
+        <div style="font-size:1.25rem;font-weight:900;color:#fff;margin-bottom:1rem;letter-spacing:-.02em">M<span style="color:var(--accent)">-</span>Motors</div>
+        <p style="line-height:1.75;font-size:.85rem">Spécialiste véhicules d'occasion.<br>Location longue durée &amp; Achat.</p>
+        <p style="margin-top:.75rem;font-size:.82rem">01 23 45 67 89<br>contact@mmotors.fr</p>
+      </div>
+      <div>
+        <div style="font-weight:700;color:rgba(255,255,255,.6);margin-bottom:.9rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">Services</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:.5rem">
+          <li><a href="index.html"           style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.875rem">Achat de véhicule</a></li>
+          <li><a href="index.html#services"  style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.875rem">Location LLD</a></li>
+          <li><a href="dossier.html"         style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.875rem">Déposer un dossier</a></li>
+          <li><a href="espace-client.html"   style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.875rem">Espace client</a></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:700;color:rgba(255,255,255,.6);margin-bottom:.9rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">Informations légales</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:.5rem">
+          <li><a href="mentions-legales.html"           style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.875rem">Mentions légales</a></li>
+          <li><a href="politique-confidentialite.html"  style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.875rem">Politique de confidentialité</a></li>
+          <li><a href="cookies.html"                   style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.875rem">Gestion des cookies</a></li>
+          <li><a href="cgv.html"                       style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.875rem">CGV</a></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:700;color:rgba(255,255,255,.6);margin-bottom:.9rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">Horaires</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:.4rem;font-size:.875rem">
+          <li style="color:rgba(255,255,255,.4)">Lun – Ven : 9h – 19h</li>
+          <li style="color:rgba(255,255,255,.4)">Samedi : 9h – 17h</li>
+          <li style="color:rgba(255,255,255,.4)">Dimanche : Fermé</li>
+        </ul>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.8rem">
+      <span>&copy; 2026 M-Motors. Tous droits réservés.</span>
+      <span><a href="mentions-legales.html" style="color:rgba(255,255,255,.35);text-decoration:none">Mentions légales</a> · <a href="politique-confidentialite.html" style="color:rgba(255,255,255,.35);text-decoration:none">Confidentialité</a> · <a href="cgv.html" style="color:rgba(255,255,255,.35);text-decoration:none">CGV</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(15,23,42,.97);border-top:1px solid rgba(255,255,255,.08);padding:1.25rem 2rem;backdrop-filter:blur(8px)">
+  <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap">
+    <p style="color:rgba(255,255,255,.6);font-size:.875rem;margin:0;flex:1;min-width:260px">
+      Nous utilisons des cookies essentiels au bon fonctionnement du site.
+      <a href="cookies.html" style="color:var(--accent);text-decoration:none">En savoir plus</a>
+    </p>
+    <div style="display:flex;gap:.75rem;flex-shrink:0">
+      <button onclick="refuseCookies()" class="btn btn-sm" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15)">Refuser</button>
+      <button onclick="acceptCookies()" class="btn btn-primary btn-sm">Accepter</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/api-auth.js"></script>
+<script src="js/api-vehicles.js"></script>
+<script src="js/api-dossiers.js"></script>
+<script src="js/api-contrats.js"></script>
+<script src="js/api-sav.js"></script>
+<script src="js/app.js"></script>
+<script src="js/app-fmt.js"></script>
+<script src="js/app-ui.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

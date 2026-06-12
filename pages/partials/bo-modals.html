@@ -1,0 +1,315 @@
+<!-- ══ MODAL VÉHICULE ══ -->
+<div class="modal-overlay" id="modal-vehicle">
+  <div class="modal" style="max-width:600px;max-height:90vh;overflow-y:auto">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3 id="modal-vehicle-title">Ajouter un véhicule</h3>
+    <input type="hidden" id="v-id"/>
+    <div class="form-group">
+      <label class="form-label">Photo principale</label>
+      <div id="photo-preview-wrap">
+        <div class="photo-placeholder" onclick="document.getElementById('v-photo').click()">
+          Cliquez pour ajouter une photo (JPG, PNG)
+        </div>
+      </div>
+      <input type="file" id="v-photo" accept="image/*" style="display:none" onchange="previewPhoto(this)"/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Marque</label>
+        <select class="form-select" id="v-brand">
+          <option>Renault</option><option>Peugeot</option><option>BMW</option>
+          <option>Dacia</option><option>Toyota</option><option>Volkswagen</option>
+          <option>Citroen</option><option>Ford</option><option>Mercedes</option>
+          <option>Audi</option><option>Opel</option><option>Hyundai</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Modèle</label>
+        <input class="form-input" type="text" id="v-model" placeholder="ex : Clio"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Année</label><input class="form-input" type="number" id="v-year" min="2000" max="2026"/></div>
+      <div class="form-group"><label class="form-label">Kilométrage</label><input class="form-input" type="number" id="v-km" min="0" placeholder="0"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Carburant</label>
+        <select class="form-select" id="v-fuel"><option>Essence</option><option>Diesel</option><option>Hybride</option><option>Électrique</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Couleur</label><input class="form-input" type="text" id="v-color" placeholder="ex : Gris"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Mode</label>
+        <select class="form-select" id="v-type" onchange="togglePricing()">
+          <option value="achat">Achat</option>
+          <option value="location">Location LLD</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Statut</label>
+        <select class="form-select" id="v-status">
+          <option value="disponible">Disponible</option>
+          <option value="reserve">Réservé</option>
+          <option value="vendu">Vendu</option>
+        </select>
+      </div>
+    </div>
+    <div id="price-achat-group" class="form-group">
+      <label class="form-label">Prix de vente (€)</label>
+      <input class="form-input" type="number" id="v-price" min="0" placeholder="12 500"/>
+    </div>
+    <div id="price-location-group" class="form-group hidden">
+      <label class="form-label">Loyer mensuel (€/mois)</label>
+      <input class="form-input" type="number" id="v-monthly" min="0" placeholder="350"/>
+    </div>
+    <div id="services-group">
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;margin-bottom:1rem">
+        <div id="services-header-note" style="font-weight:700;font-size:.88rem;color:var(--primary);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.04em">Services inclus dans l'abonnement Location LLD</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;cursor:pointer">
+            <input type="checkbox" id="svc-assurance" checked style="width:1rem;height:1rem"/>Assurance tous risques
+          </label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;cursor:pointer">
+            <input type="checkbox" id="svc-assistance" checked style="width:1rem;height:1rem"/>Assistance dépannage 24/7
+          </label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;cursor:pointer">
+            <input type="checkbox" id="svc-entretien" checked style="width:1rem;height:1rem"/>Entretien &amp; SAV
+          </label>
+          <label style="display:flex;align-items:center;gap:.5rem;font-size:.88rem;cursor:pointer">
+            <input type="checkbox" id="svc-ct" checked style="width:1rem;height:1rem"/>Contrôle technique
+          </label>
+        </div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+          <div style="font-weight:700;font-size:.88rem;color:var(--primary);text-transform:uppercase;letter-spacing:.04em">Options supplémentaires</div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="addOption()">+ Ajouter une option</button>
+        </div>
+        <div id="options-list" style="display:flex;flex-direction:column;gap:.4rem"></div>
+        <p class="form-help" style="margin-top:.5rem">Ex : GPS connecté, Siège enfant, Assurance conducteur supplémentaire…</p>
+      </div>
+    </div>
+    <div id="modal-vehicle-alert"></div>
+    <div style="display:flex;justify-content:flex-end;gap:.75rem;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-primary" id="btn-save-vehicle" onclick="saveVehicle()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL DOSSIER ══ -->
+<div class="modal-overlay" id="modal-dossier">
+  <div class="modal" style="max-width:620px;max-height:90vh;overflow-y:auto">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Instruire le dossier</h3>
+    <div id="modal-dossier-recap"></div>
+    <div class="form-group mt-2">
+      <label class="form-label">Motif / Commentaire (obligatoire si refus)</label>
+      <textarea class="form-textarea" id="d-motif" style="min-height:80px" placeholder="Décision et commentaire pour le client…"></textarea>
+    </div>
+    <div id="modal-dossier-alert"></div>
+    <div style="display:flex;gap:.65rem;margin-top:1rem;flex-wrap:wrap">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-outline"   onclick="decideDossier('en_cours')">Mettre en cours</button>
+      <button class="btn btn-primary"   onclick="decideDossier('valide')">Valider</button>
+      <button class="btn btn-danger"    onclick="decideDossier('refuse')">Refuser</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL CRÉER CONTRAT ══ -->
+<div class="modal-overlay" id="modal-create-contrat">
+  <div class="modal" style="max-width:540px">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Créer le contrat</h3>
+    <div id="cc-recap" style="margin-bottom:1rem"></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Montant <span style="color:var(--danger)">*</span></label>
+        <input class="form-input" type="number" id="cc-montant" min="0" step="0.01" placeholder="Ex : 850.00"/>
+        <p class="form-help" id="cc-montant-help"></p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Km initial <span style="color:var(--danger)">*</span></label>
+        <input class="form-input" type="number" id="cc-km" min="0" placeholder="Ex : 12500"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Date de début <span style="color:var(--danger)">*</span></label>
+        <input class="form-input" type="date" id="cc-debut"/>
+      </div>
+      <div class="form-group" id="cc-fin-group">
+        <label class="form-label">Date de fin <span style="font-weight:400;color:var(--text-muted)">(location)</span></label>
+        <input class="form-input" type="date" id="cc-fin"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes internes <span style="font-weight:400;color:var(--text-muted)">(non visibles client)</span></label>
+      <textarea class="form-textarea" id="cc-notes" style="min-height:60px" placeholder="Conditions particulières, observations…"></textarea>
+    </div>
+    <div id="cc-alert"></div>
+    <div style="display:flex;gap:.65rem;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-success" id="btn-cc" onclick="doCreateContrat()" style="background:var(--success);border-color:var(--success)">Créer le contrat</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL VALIDER SIGNATURE ══ -->
+<div class="modal-overlay" id="modal-valider-signature">
+  <div class="modal" style="max-width:500px">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Valider la signature</h3>
+    <div id="modal-vs-recap" style="margin-bottom:1rem"></div>
+    <div class="form-group">
+      <label class="form-label">Message pour le client <span style="font-weight:400;color:var(--text-muted)">(visible dans son espace)</span></label>
+      <textarea class="form-textarea" id="vs-commentaire" style="min-height:70px" placeholder="Ex : Signature bien reçue, nous avons vérifié vos informations…"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes internes <span style="font-weight:400;color:var(--text-muted)">(non visible client)</span></label>
+      <textarea class="form-textarea" id="vs-notes" style="min-height:55px" placeholder="Remarques internes…"></textarea>
+    </div>
+    <div id="modal-vs-alert"></div>
+    <div style="display:flex;gap:.65rem;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-primary" id="btn-vs" onclick="doValiderSignature()">Valider la signature</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL VALIDER PAIEMENT ══ -->
+<div class="modal-overlay" id="modal-valider-paiement">
+  <div class="modal" style="max-width:520px">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Confirmer la réception du paiement</h3>
+    <div id="modal-vp-recap" style="margin-bottom:1rem"></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Mode de paiement <span style="color:var(--danger)">*</span></label>
+        <select class="form-select" id="vp-mode">
+          <option value="">Sélectionnez…</option>
+          <option value="virement">Virement bancaire</option>
+          <option value="cb">Carte bancaire</option>
+          <option value="cheque">Chèque</option>
+          <option value="especes">Espèces</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date de réception <span style="color:var(--danger)">*</span></label>
+        <input class="form-input" type="date" id="vp-date"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Référence paiement</label>
+      <input class="form-input" type="text" id="vp-ref" placeholder="Ex : VIR-2026-0045"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message pour le client <span style="font-weight:400;color:var(--text-muted)">(visible dans son espace)</span></label>
+      <textarea class="form-textarea" id="vp-commentaire" style="min-height:70px" placeholder="Ex : Votre paiement a bien été reçu. Nous allons vous proposer des dates pour la remise des clés."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes internes</label>
+      <textarea class="form-textarea" id="vp-notes" style="min-height:55px" placeholder="Remarques internes…"></textarea>
+    </div>
+    <div id="modal-vp-alert"></div>
+    <div style="display:flex;gap:.65rem;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-success" id="btn-vp" onclick="doValiderPaiement()">Confirmer le paiement</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL PROPOSER RDV ══ -->
+<div class="modal-overlay" id="modal-proposer-rdv">
+  <div class="modal" style="max-width:540px">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Proposer des dates de remise des clés</h3>
+    <div id="modal-rdv-recap" style="margin-bottom:1rem"></div>
+    <div class="form-group">
+      <label class="form-label">Dates disponibles <span style="color:var(--danger)">*</span> <span style="font-weight:400;color:var(--text-muted)">(proposez 1 à 5 dates)</span></label>
+      <div id="rdv-dates-list" style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem"></div>
+      <button type="button" class="btn btn-secondary btn-sm" onclick="addRDVDate()" style="margin-top:.25rem">+ Ajouter une date</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Lieu de remise</label>
+      <select class="form-select" id="rdv-lieu">
+        <option value="">— Sélectionner une ville —</option>
+        <option value="Paris">Paris</option><option value="Lyon">Lyon</option>
+        <option value="Marseille">Marseille</option><option value="Bordeaux">Bordeaux</option>
+        <option value="Nice">Nice</option><option value="Toulouse">Toulouse</option>
+        <option value="Nantes">Nantes</option><option value="Strasbourg">Strasbourg</option>
+        <option value="Lille">Lille</option><option value="Rennes">Rennes</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message pour le client <span style="font-weight:400;color:var(--text-muted)">(visible dans son espace)</span></label>
+      <textarea class="form-textarea" id="rdv-commentaire" style="min-height:70px" placeholder="Ex : Merci de sélectionner l'une des dates ci-dessous pour récupérer votre véhicule."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes internes</label>
+      <textarea class="form-textarea" id="rdv-notes" style="min-height:55px" placeholder="Remarques internes…"></textarea>
+    </div>
+    <div id="modal-rdv-alert"></div>
+    <div style="display:flex;gap:.65rem;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-primary" id="btn-rdv" onclick="doProposerRDV()">Envoyer les dates au client</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL CONFIRMER LIVRAISON ══ -->
+<div class="modal-overlay" id="modal-livrer">
+  <div class="modal" style="max-width:520px">
+    <button class="modal-close" onclick="closeModals()">x</button>
+    <h3>Remise des clés — double signature</h3>
+    <div id="modal-liv-recap" style="margin-bottom:1rem"></div>
+    <div id="modal-liv-reception-client" style="display:none;margin-bottom:.75rem"></div>
+    <div class="form-group">
+      <label class="form-label">Date de remise effective <span style="color:var(--danger)">*</span></label>
+      <input class="form-input" type="date" id="liv-date"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Votre signature (conseiller M-Motors) <span style="color:var(--danger)">*</span></label>
+      <input class="form-input" type="text" id="liv-admin-sig"
+        style="font-family:'Segoe Script','Brush Script MT',cursive;font-size:1.1rem;color:#1e3a5f"
+        placeholder="Tapez votre nom complet"
+        oninput="document.getElementById('liv-admin-preview').textContent=this.value"/>
+      <div id="liv-admin-preview" style="margin-top:.4rem;padding:.5rem .85rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:.4rem;min-height:36px;font-family:'Segoe Script','Brush Script MT',cursive;font-size:1.15rem;color:#1e3a5f"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message pour le client <span style="font-weight:400;color:var(--text-muted)">(visible dans son espace)</span></label>
+      <textarea class="form-textarea" id="liv-commentaire" style="min-height:65px" placeholder="Ex : Félicitations ! Votre véhicule vous a été remis ce jour. Bienvenue chez M-Motors."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes internes</label>
+      <textarea class="form-textarea" id="liv-notes" style="min-height:50px" placeholder="Remarques internes…"></textarea>
+    </div>
+    <div id="modal-liv-alert"></div>
+    <div style="display:flex;gap:.65rem;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="closeModals()">Annuler</button>
+      <button class="btn btn-success" id="btn-liv" onclick="doLivrer()">Confirmer la remise</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL DÉTAIL CONTRAT ══ -->
+<div class="modal-overlay" id="modal-contrat-detail">
+  <div class="modal" style="max-width:640px;max-height:90vh;display:flex;flex-direction:column;padding:0;overflow:hidden">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);flex-shrink:0">
+      <h3 style="margin:0">Détail du contrat</h3>
+      <button class="btn btn-secondary btn-sm" onclick="closeModals()">Fermer</button>
+    </div>
+    <div id="modal-cd-content" style="overflow-y:auto;padding:1.25rem 1.5rem;flex:1"></div>
+  </div>
+</div>
+
+<!-- ══ DRAWER FICHE CLIENT ══ -->
+<div id="client-drawer-overlay" onclick="closeClientDrawer()"
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;backdrop-filter:blur(4px)"></div>
+<div id="client-drawer"
+  style="display:none;position:fixed;top:0;right:0;width:min(680px,100vw);height:100vh;background:#fff;z-index:301;box-shadow:-8px 0 40px rgba(0,0,0,.18);overflow-y:auto;transition:transform .3s ease">
+  <div id="client-drawer-content" style="padding:0 0 4rem"></div>
+</div>

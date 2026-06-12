@@ -1,0 +1,12 @@
+.contract-step{display:flex;align-items:flex-start;gap:1rem;padding:1.25rem;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--white);transition:all .2s}
+.contract-step.done{border-color:var(--success);background:var(--success-light)}
+.contract-step.active{border-color:var(--accent);background:var(--accent-light)}
+.contract-step.locked{opacity:.4;pointer-events:none}
+.step-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;flex-shrink:0;border:2px solid var(--border);background:var(--bg);color:var(--text-muted)}
+.contract-step.done  .step-icon{background:var(--success);border-color:var(--success);color:#fff}
+.contract-step.active .step-icon{background:var(--accent);border-color:var(--accent);color:#fff}
+.vehicle-active-card{background:linear-gradient(135deg,var(--primary) 0%,#1d4ed8 100%);color:#fff;border-radius:var(--radius-lg);padding:2rem;margin-bottom:1.5rem}
+.payment-bar{height:8px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden;margin:.5rem 0}
+.payment-fill{height:100%;background:#fff;border-radius:4px;transition:width .6s ease}
+.notif-item{display:flex;align-items:flex-start;gap:.85rem;padding:.85rem 1rem;border-radius:var(--radius-sm);margin-bottom:.5rem}
+.notif-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:.35rem}

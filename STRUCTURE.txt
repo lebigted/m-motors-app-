@@ -8,19 +8,23 @@ L'API Django tourne sur http://127.0.0.1:8000 (configurable dans js/api.js).
 PAGES HTML
 ----------
 
-index.html                  Catalogue public — liste et filtres véhicules.
-pages/login.html            Connexion et inscription.
-pages/vehicle.html          Fiche véhicule + simulateur LLD + simulateur crédit.
-pages/dossier.html          Formulaire de dépôt de dossier (5 étapes).
-pages/backoffice.html       SPA back-office admin (onglets injectés dynamiquement).
-pages/espace-client.html    SPA espace client (même principe).
+index.html                      Catalogue public — liste et filtres véhicules.
+pages/login.html                Connexion et inscription.
+pages/vehicle.html              Fiche véhicule + simulateur LLD + simulateur crédit.
+pages/dossier.html              Formulaire de dépôt de dossier (5 étapes).
+pages/backoffice.html           SPA back-office admin (onglets injectés dynamiquement).
+pages/espace-client.html        SPA espace client (même principe).
+pages/mentions-legales.html     Mentions légales.
+pages/politique-confidentialite.html  Politique de confidentialité.
+pages/cookies.html              Politique cookies.
+pages/cgv.html                  Conditions générales de vente.
+pages/404.html                  Page d'erreur personnalisée.
 
 pages/partials/
   Fragments HTML injectés dans les SPAs selon l'onglet actif.
   bo-dashboard.html, bo-dossiers.html, bo-contrats.html,
-  bo-vehicules.html, bo-clients.html, bo-sav.html, bo-tchat.html
-  ec-dossiers.html, ec-contrats.html, ec-messagerie.html,
-  ec-sav.html, ec-profil.html
+  bo-vehicules.html, bo-clients.html, bo-sav.html, bo-tchat.html,
+  bo-archives.html, bo-modals.html
 
 
 CSS — css/
@@ -61,15 +65,17 @@ JS — js/
     dossier.js          Formulaire 5 étapes (sélection → envoi).
 
   Back-office admin (préfixe bo-) :
-    bo-globals.js       Session admin, variables partagées.
-    bo-init.js          Point d'entrée, chargement initial.
-    bo-dashboard.js     KPIs, graphiques Chart.js, actions requises.
-    bo-dossiers.js      Instruction dossiers, décision, archivage, export CSV.
-    bo-vehicules.js     Gestion parc (CRUD, upload photo).
-    bo-clients.js       Liste clients, drawer fiche.
-    bo-contrats.js      Workflow admin contrats (9 étapes).
-    bo-sav.js           Tickets SAV (traitement, clôture).
-    bo-tchat.js         Messagerie admin (dossiers + SAV).
+    bo-globals.js           Session admin, variables partagées.
+    bo-init.js              Point d'entrée, chargement initial.
+    bo-dashboard.js         KPIs, graphiques Chart.js, actions requises.
+    bo-dossiers.js          Instruction dossiers, décision, archivage, export CSV.
+    bo-vehicules.js         Gestion parc (CRUD, upload photo).
+    bo-clients.js           Liste clients, drawer fiche.
+    bo-contrats.js          Workflow admin contrats (9 étapes).
+    bo-contrats-detail.js   Affichage détail contrat, documents.
+    bo-contrats-workflow.js Actions workflow : signature, activation, résiliation.
+    bo-sav.js               Tickets SAV (traitement, clôture).
+    bo-tchat.js             Messagerie admin (dossiers + SAV).
 
   Espace client (préfixe ec-) :
     ec-init.js          Session client, chargement initial.

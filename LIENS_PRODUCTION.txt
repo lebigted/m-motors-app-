@@ -1,0 +1,24 @@
+M-MOTORS — LIENS DE PRODUCTION
+================================
+
+FRONT-END (site client)
+  https://www.webcorelab.fr/
+
+API DJANGO (back-end)
+  https://m-motors-django.onrender.com/
+
+ADMIN DJANGO
+  https://m-motors-django.onrender.com/admin/
+
+BASE DE DONNÉES
+  PostgreSQL 16 — OVH Web Cloud Databases
+  Host : tl258783-001.eu.clouddb.ovh.net
+  Port : 35731
+
+COMPTES DE TEST
+  Client  : client@test.com   /  client123
+  Admin   : lucastestard77@gmail.com  /  (admin1234)
+
+DÉPÔTS GITHUB
+  Back-end  : https://github.com/lebigted/m-motors-django-
+  Front-end : https://github.com/lebigted/m-motors-app-

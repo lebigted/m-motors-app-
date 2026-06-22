@@ -1,6 +1,6 @@
 /** @file api.js — Couche HTTP M-Motors : objet `api` global, JWT auto-refresh, domaines fusionnés. */
 
-const API_BASE = 'http://127.0.0.1:8000/api';
+const API_BASE = 'https://m-motors-django.onrender.com/api';
 
 const api = {
 
